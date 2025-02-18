@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  taskify-app:
+    build: .
+    container_name: taskify-app
+    command: ["sh", "-c", "/entrypoint.sh"]
+    volumes:
+      - ./:/var/www
+    depends_on:
+      - taskify-mariadb
+      - taskify-redis
+    networks:
+      - app_network
+
+  taskify-mariadb:
+    image: mariadb:latest
+    container_name: taskify-mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "18144:3306"
+    networks:
+      - app_network
+    volumes:
+      - ./db/mariadb:/var/lib/mysql
+
+  taskify-redis:
+    image: redis:latest
+    container_name: taskify-redis
+    restart: always
+    volumes:
+      - "./db/redis:/data"
+    ports:
+      - "18143:6379"
+    networks:
+      - app_network
+
+  taskify-nginx:
+    image: nginx:latest
+    container_name: taskify-nginx
+    restart: always
+    ports:
+      - "18140:80"
+      - "18141:443"
+    volumes:
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./:/var/www
+    depends_on:
+      - taskify-app
+    networks:
+      - app_network
+
+networks:
+  app_network:
+
+volumes:
+  mariadb_data:
