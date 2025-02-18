@@ -2,6 +2,7 @@ package com.taskify.dto;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ApiResponse<T> {
@@ -50,6 +51,6 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> error(int code, String primaryMessage, String secondaryMessage, List<String> errors) {
-        return new ApiResponse<>(false, code, primaryMessage, secondaryMessage, null, errors);
+        return new ApiResponse<>(false, code, primaryMessage, secondaryMessage, new HashMap<>(), errors);
     }
 }
