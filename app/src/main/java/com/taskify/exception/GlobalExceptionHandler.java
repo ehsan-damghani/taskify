@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -22,5 +23,11 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.toList());
 
         return ApiResponse.error(400, "Validation Error", "خطای اعتبارسنجی", errors);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ApiResponse.error(400, ex.getMessage(), "خطای ورودی", new ArrayList<>());
     }
 }

@@ -49,4 +49,16 @@ public class TaskService {
     
         taskRepository.delete(task);
     }
+
+    public Task markTaskAsDone(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Task not found"));
+    
+        if (!"pending".equals(task.getStatus())) {
+            throw new IllegalArgumentException("Task is not pending");
+        }
+
+        task.setStatus("done");
+        return taskRepository.save(task);
+    }
 }

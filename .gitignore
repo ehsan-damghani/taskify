@@ -1,3 +1,5 @@
 ### DB Volume ###
 db/
+
+### Logs ###
 app/logs/

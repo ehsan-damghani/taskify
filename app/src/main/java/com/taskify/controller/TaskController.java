@@ -75,4 +75,12 @@ public class TaskController {
 
         return ApiResponse.success(payload);
     }
+    
+    @PatchMapping("/{id}/done")
+    public ApiResponse markTaskAsDone(@PathVariable Long id) {
+        Task updatedTask = taskService.markTaskAsDone(id);
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("task", updatedTask);
+        return ApiResponse.success(payload);
+    }
 }
